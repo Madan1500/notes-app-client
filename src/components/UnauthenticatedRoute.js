@@ -1,6 +1,7 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 import { useAppContext } from "../libs/contextLib";
+
 function querystring(name, url = window.location.href) {
     name = name.replace(/[[]]/g, "\\$&");
     const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
@@ -17,14 +18,10 @@ function querystring(name, url = window.location.href) {
 export default function UnauthenticatedRoute({ children, ...rest }) {
     const { isAuthenticated } = useAppContext();
     const redirect = querystring("redirect");
+    const navigate = useNavigate();
+
     return (
-        <Route {...rest}>
-            {!isAuthenticated ? (
-                children
-            ) : (
-                <Redirect to={redirect === "" || redirect === null ? "/" : redirect} />
-            )}
-        </Route>
+        <Route {...rest} element={!isAuthenticated ? children : navigate(redirect === "" || redirect === null ? "/" : redirect)} />
     );
 }
 

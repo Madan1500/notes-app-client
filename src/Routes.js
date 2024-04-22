@@ -19,17 +19,10 @@ export default function Routes() {
             <Route exact path="/notes/new" element={<NewNote />}></Route>
             <Route exact path="/notes/:id" element={<Notes />}>
             </Route>
-            <UnauthenticatedRoute exact path="/login">
-                <Login />
-            </UnauthenticatedRoute><UnauthenticatedRoute exact path="/signup">
-                <Signup />
-            </UnauthenticatedRoute>
-            <AuthenticatedRoute exact path="/notes/new">
-                <NewNote />
-            </AuthenticatedRoute>
-            <AuthenticatedRoute exact path="/notes/:id">
-                <Notes />
-            </AuthenticatedRoute>
+            <Route path="/login" element={<UnauthenticatedRoute><Login /></UnauthenticatedRoute>} />
+            <Route path="/signup" element={<UnauthenticatedRoute><Signup /></UnauthenticatedRoute>} />
+            <Route path="/notes/new" element={<AuthenticatedRoute><NewNote /></AuthenticatedRoute>} />
+            <Route path="/notes/:id" element={<AuthenticatedRoute><Notes /></AuthenticatedRoute>} />
             <Route path="*" element={<NotFound></NotFound>}></Route>
 
         </Router>
