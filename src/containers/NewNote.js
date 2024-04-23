@@ -51,6 +51,7 @@ export default function NewNote() {
                     <Form.Control
                         value={content}
                         as="textarea"
+                        placeholder="Enter text here to save..."
                         onChange={(e) => setContent(e.target.value)}
                     />
                 </Form.Group>

@@ -8,6 +8,7 @@ import config from "../config";
 import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
 import { Link } from "react-router-dom";
+import { FaArrowCircleLeft } from "react-icons/fa";
 
 export default function Notes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +20,7 @@ export default function Notes() {
     const [note, setNote] = useState(null);
     const [content, setContent] = useState("");
     useEffect(() => {
-        function loadNote() {
+        async function loadNote() {
             return API.get("notes", `/notes/${id}`);
         }
         async function onLoad() {
@@ -101,6 +102,7 @@ export default function Notes() {
         }
     }
 
+
     function deleteNote() {
         return API.del("notes", `/notes/${id}`);
     }
@@ -126,6 +128,7 @@ export default function Notes() {
         <div className="Notes">
             {note && (
                 <Form onSubmit={handleSubmit}>
+                    <Link to={"/"} className="back"><FaArrowCircleLeft /></Link>
                     <Form.Group controlId="content">
                         <Form.Control
                             as="textarea"

@@ -7,3 +7,12 @@
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
 }
+
+.py-3.text-nowrap.text-truncate {
+    background-color: #0EB1D2;
+    color: #fff;
+}
+
+.py-3.text-nowrap.text-truncate:hover {
+    background: linear-gradient(90deg, rgb(65, 175, 197) 0%, rgb(64, 241, 241) 100%);
+}

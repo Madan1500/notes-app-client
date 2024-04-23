@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import { Auth } from "aws-amplify";
+import { motion } from "framer-motion";
 import "./Signup.css";
 export default function Signup() {
     const [fields, handleFieldChange] = useFormFields({
@@ -83,7 +84,13 @@ export default function Signup() {
     }
     function renderForm() {
         return (
+            <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <Form onSubmit={handleSubmit}>
+                <h1 className="text-center">Signup</h1>
                 <Form.Group controlId="email" size="lg">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -105,21 +112,25 @@ export default function Signup() {
                     <Form.Label>Confirm Password</Form.Label>
                     <Form.Control
                         type="password"
-                        onChange={handleFieldChange}
                         value={fields.confirmPassword}
+                        onChange={handleFieldChange}
                     />
                 </Form.Group>
                 <LoaderButton
                     block
                     size="lg"
                     type="submit"
-                    variant="success"
                     isLoading={isLoading}
                     disabled={!validateForm()}
                 >
                     Signup
                 </LoaderButton>
+                <Form.Text className="text-muted mt-3">
+                    Already have an account?{" "}
+                    <Link to="/login" className="btn-link">Login</Link>
+                </Form.Text>
             </Form>
+        </motion.div>
         );
     }
     return (

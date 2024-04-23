@@ -2,8 +2,17 @@
     height: 300px;
     font-size: 1.5rem;
 }
+body{
+    background-color: #2B4141;
+    color: white
+}
 
 img {
     max-width: 100%;
     float: right;
+}
+
+.back {
+    margin-top: 20px;
+    font-size: 2rem;
 }

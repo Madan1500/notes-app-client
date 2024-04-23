@@ -28,6 +28,7 @@ export default function Home() {
     function loadNotes() {
         return API.get("notes", "/notes");
     }
+
     function renderNotesList(notes) {
         return (
             <>

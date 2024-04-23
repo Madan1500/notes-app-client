@@ -6,6 +6,8 @@ import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import "./Login.css";
 export default function Login() {
     const history = useNavigate();
@@ -32,34 +34,51 @@ export default function Login() {
     }
     return (
         <div className="Login">
-            <Form onSubmit={handleSubmit}>
-                <Form.Group size="lg" controlId="email">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="email"
-                        value={fields.email}
-                        onChange={handleFieldChange}
-                    />
-                </Form.Group>
-                <Form.Group size="lg" controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={fields.password}
-                        onChange={handleFieldChange}
-                    />
-                </Form.Group>
-                <LoaderButton
-                    block
-                    size="lg"
-                    type="submit"
-                    isLoading={isLoading}
-                    disabled={!validateForm()}
-                >
-                    Login
-                </LoaderButton>
-            </Form>
+            <motion.div
+                className="Login"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Form onSubmit={handleSubmit} className="shadow-lg p-3 mb-5 bg-white rounded">
+                <h1 className="text-center">Login</h1>
+                    <Form.Group size="lg" controlId="email">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            autoFocus
+                            type="email"
+                            value={fields.email}
+                            onChange={handleFieldChange}
+                            className="rounded-pill"
+                        />
+                    </Form.Group>
+                    <Form.Group size="lg" controlId="password">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={fields.password}
+                            onChange={handleFieldChange}
+                            className="rounded-pill"
+                        />
+                    </Form.Group>
+                    <LoaderButton
+                        block
+                        size="lg"
+                        type="submit"
+                        isLoading={isLoading}
+                        disabled={!validateForm()}
+                        className="rounded-pill"
+                    >
+                        Login
+                    </LoaderButton>
+                    <Form.Text className="text-muted mt-3">
+                        Don't have an account?{" "}
+                    <Link to="/signup" className="btn-link">
+                        Signup
+                    </Link>
+                    </Form.Text>
+                </Form>
+            </motion.div>
         </div>
     );
 }

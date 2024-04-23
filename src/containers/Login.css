@@ -8,3 +8,57 @@
         max-width: 320px;
     }
 }
+
+/* Login.css */
+.text-center{
+    color: black;
+}
+.btn-link{
+    font-size: 16px;
+}
+.Login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(90deg, rgba(39,176,255,1) 0%, rgba(0,232,236,1) 100%);
+}
+
+.Login form {
+    height: 350px;
+    width: 320px;
+    margin: 10px;
+    padding: 2em;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.Login form label {
+    font-weight: bold;
+    color: #333;
+}
+
+.Login form input {
+    margin-bottom: 1em;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+
+.Login form button {
+    width: 100%;
+    padding: 0.5em;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(90deg, rgb(67, 162, 218) 0%, rgb(73, 212, 214) 100%);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.Login form button:hover {
+    background: linear-gradient(90deg, rgba(0,232,236,1) 0%, rgba(39,176,255,1) 100%);
+}
