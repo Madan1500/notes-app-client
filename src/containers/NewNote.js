@@ -1,15 +1,16 @@
-import { API } from "aws-amplify";
 import React, { useRef, useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { onError } from "../libs/errorLib";
+import { API } from "aws-amplify";
 import config from "../config";
 import { s3Upload } from "../libs/awsLib";
 import "./NewNote.css";
 export default function NewNote() {
     const file = useRef(null);
     const history = useNavigate();
+    const [previewImage, setPreviewImage] = useState(null);
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     function validateForm() {
@@ -17,6 +18,7 @@ export default function NewNote() {
     }
     function handleFileChange(event) {
         file.current = event.target.files[0];
+        setPreviewImage(URL.createObjectURL(file.current));
     }
     async function handleSubmit(event) {
         event.preventDefault();
@@ -36,12 +38,12 @@ export default function NewNote() {
             onError(e); setIsLoading(false);
         }
     }
-
     function createNote(note) {
         return API.post("notes", "/notes", {
             body: note
         });
     }
+
     return (
         <div className="NewNote">
             <Form onSubmit={handleSubmit}>
@@ -55,6 +57,13 @@ export default function NewNote() {
                 <Form.Group controlId="file">
                     <Form.Label>Attachment</Form.Label>
                     <Form.Control onChange={handleFileChange} type="file" />
+                    {previewImage && (
+                        <img
+                            src={previewImage}
+                            alt="Preview"
+                            style={{ maxWidth: '100%', height: '200px', objectFit: 'contain' }}
+                        />
+                    )}
                 </Form.Group>
                 <LoaderButton
                     block

@@ -49,7 +49,7 @@ export default function Signup() {
             await Auth.confirmSignUp(fields.email, fields.confirmationCode);
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
-            history.push("/");
+            history("/");
         } catch (e) {
             onError(e);
             setIsLoading(false);

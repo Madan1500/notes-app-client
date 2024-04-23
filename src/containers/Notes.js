@@ -7,6 +7,7 @@ import LoaderButton from "../components/LoaderButton";
 import config from "../config";
 import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
+import { Link } from "react-router-dom";
 
 export default function Notes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -42,8 +43,33 @@ export default function Notes() {
     function formatFilename(str) {
         return str.replace(/^\w+-/, "");
     }
-    function handleFileChange(event) {
+    function updateNote(attachment) {
+        return API.put("notes", `/notes/${id}`, {
+            body: {
+                attachment,
+                content
+            }
+        });
+    }
+    async function handleFileChange(event) {
         file.current = event.target.files[0];
+        setIsLoading(true);
+
+        try {
+            if (file.current) {
+                const attachment = await s3Upload(file.current);
+                const attachmentURL = await Storage.vault.get(attachment);
+                await updateNote(attachment);
+                setNote(prevState => ({
+                    ...prevState,
+                    attachmentURL
+                }));
+            }
+        } catch (e) {
+            onError(e);
+        }
+
+        setIsLoading(false);
     }
     function saveNote(note) {
         return API.put("notes", `/notes/${id}`, {
@@ -107,16 +133,25 @@ export default function Notes() {
                             onChange={(e) => setContent(e.target.value)}
                         />
                     </Form.Group>
+                    {note.attachmentURL && (
+                        <img src={note.attachmentURL} 
+                        alt="Note attachment" 
+                        style={{ 
+                            maxWidth: '100%', 
+                            height: '200px', 
+                            objectFit: 'contain' 
+                        }}  />
+                    )}
                     <Form.Group controlId="file">
                         <Form.Label>Attachment</Form.Label>
                         {note.attachment && (
                             <p>
-                                <a
+                                <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href={note.attachmentURL}
                                 >{formatFilename(note.attachment)}
-                                </a>
+                                </Link>
                             </p>
                         )}
                         <Form.Control onChange={handleFileChange} type="file" />
