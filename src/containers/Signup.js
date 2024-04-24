@@ -7,6 +7,7 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import { Auth } from "aws-amplify";
 import { motion } from "framer-motion";
+import { toast } from 'react-toastify';
 import "./Signup.css";
 export default function Signup() {
     const [fields, handleFieldChange] = useFormFields({
@@ -51,6 +52,8 @@ export default function Signup() {
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
             history("/");
+            const name=fields.email.split("@")[0];
+            toast.success(`${name} your account has been created successfully`);
         } catch (e) {
             onError(e);
             setIsLoading(false);

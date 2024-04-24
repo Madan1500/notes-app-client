@@ -8,6 +8,7 @@ import { useFormFields } from "../libs/hooksLib";
 import { onError } from "../libs/errorLib";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 import "./Login.css";
 export default function Login() {
     const history = useNavigate();
@@ -27,6 +28,8 @@ export default function Login() {
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
             history("/");
+            const name=fields.email.split("@")[0];
+            toast.success(`Welcome ${name}`);
         } catch (e) {
             onError(e);
             setIsLoading(false);
