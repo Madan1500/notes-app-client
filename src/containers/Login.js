@@ -74,6 +74,7 @@ export default function Login() {
                     >
                         Login
                     </LoaderButton>
+                    <Link to="/reset-password">Forgot Password ?</Link>
                     <Form.Text className="text-muted mt-3">
                         Don't have an account?{" "}
                     <Link to="/signup" className="btn-link">
