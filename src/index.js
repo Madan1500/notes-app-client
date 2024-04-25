@@ -39,7 +39,7 @@ root.render(
       <App />
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={3500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

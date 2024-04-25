@@ -8,6 +8,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { AppContext } from "./libs/contextLib";
 import { useNavigate } from "react-router-dom";
 import { onError } from "./libs/errorLib";
+import { toast } from 'react-toastify';
 
 function App() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -33,6 +34,7 @@ function App() {
     await Auth.signOut();
     userHasAuthenticated(false);
     history("/login");
+    toast.success("You have successfully logged out. Have a nice day and we look forward to seeing you again soon.")
   }
 
   return (

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import LoaderButton from "../components/LoaderButton";
 import { useAppContext } from "../libs/contextLib";
 import { useFormFields } from "../libs/hooksLib";
-import { onError } from "../libs/errorLib";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -28,10 +27,11 @@ export default function Login() {
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
             history("/");
-            const name=fields.email.split("@")[0];
+            const name=fields.email.split("@")[0].replace(/\d+$/, '');
+
             toast.success(`Welcome ${name}`);
         } catch (e) {
-            onError(e);
+            toast.error(e.message);
             setIsLoading(false);
         }
     }

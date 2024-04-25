@@ -137,13 +137,13 @@ export default function Notes() {
                         />
                     </Form.Group>
                     {note.attachmentURL && (
-                        <img src={note.attachmentURL} 
-                        alt="Note attachment" 
-                        style={{ 
-                            maxWidth: '100%', 
-                            height: '200px', 
-                            objectFit: 'contain' 
-                        }}  />
+                        <img src={note.attachmentURL}
+                            alt="Note attachment"
+                            style={{
+                                maxWidth: '100%',
+                                height: '200px',
+                                objectFit: 'contain'
+                            }} />
                     )}
                     <Form.Group controlId="file">
                         <Form.Label>Attachment</Form.Label>

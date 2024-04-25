@@ -6,6 +6,8 @@ import { onError } from "../libs/errorLib";
 import { API } from "aws-amplify";
 import config from "../config";
 import { s3Upload } from "../libs/awsLib";
+import {FaArrowCircleLeft} from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./NewNote.css";
 export default function NewNote() {
     const file = useRef(null);
@@ -47,6 +49,7 @@ export default function NewNote() {
     return (
         <div className="NewNote">
             <Form onSubmit={handleSubmit}>
+            <Link to={"/"} className="back"><FaArrowCircleLeft /></Link>
                 <Form.Group controlId="content">
                     <Form.Control
                         value={content}
