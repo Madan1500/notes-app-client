@@ -16,7 +16,7 @@ export default function Notes() {
 
     const file = useRef(null);
     const { id } = useParams();
-    const history = useNavigate();
+    const navigate = useNavigate();
     const [note, setNote] = useState(null);
     const [content, setContent] = useState("");
     useEffect(() => {
@@ -53,9 +53,34 @@ export default function Notes() {
         });
     }
     async function handleFileChange(event) {
+        file.current = null;
         file.current = event.target.files[0];
         setIsLoading(true);
-
+        try {
+            if (file.current) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    setNote(prevState => ({
+                        ...prevState,
+                        attachmentURL: reader.result
+                    }));
+                }
+                reader.readAsDataURL(file.current);
+            }
+        } catch (e) {
+            onError(e);
+        }
+    
+        setIsLoading(false);
+    }
+    function saveNote(note) {
+        return API.put("notes", `/notes/${id}`, {
+            body: note
+        });
+    }
+    async function handleSave() {
+        setIsLoading(true);
+    
         try {
             if (file.current) {
                 const attachment = await s3Upload(file.current);
@@ -69,13 +94,8 @@ export default function Notes() {
         } catch (e) {
             onError(e);
         }
-
+    
         setIsLoading(false);
-    }
-    function saveNote(note) {
-        return API.put("notes", `/notes/${id}`, {
-            body: note
-        });
     }
     async function handleSubmit(event) {
         let attachment;
@@ -95,7 +115,8 @@ export default function Notes() {
                 content,
                 attachment: attachment || note.attachment
             });
-            history("/");
+            await handleSave();
+            navigate("/");
         } catch (e) {
             onError(e);
             setIsLoading(false);
@@ -117,7 +138,7 @@ export default function Notes() {
         setIsDeleting(true);
         try {
             await deleteNote();
-            history("/");
+            navigate("/");
         } catch (e) {
             onError(e);
             setIsDeleting(false);

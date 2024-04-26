@@ -14,7 +14,7 @@ function App() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, userHasAuthenticated] = useState(false);
 
-  const history = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     onLoad();
   }, []);
@@ -33,7 +33,7 @@ function App() {
   async function handleLogout() {
     await Auth.signOut();
     userHasAuthenticated(false);
-    history("/login");
+    navigate("/login");
     toast.success("You have successfully logged out. Have a nice day and we look forward to seeing you again soon.")
   }
 

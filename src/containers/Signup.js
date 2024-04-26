@@ -16,7 +16,7 @@ export default function Signup() {
         confirmPassword: "",
         confirmationCode: "",
     });
-    const history = useNavigate();
+    const navigate = useNavigate();
     const [newUser, setNewUser] = useState(null);
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ export default function Signup() {
             await Auth.confirmSignUp(fields.email, fields.confirmationCode);
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
-            history("/");
+            navigate("/");
             const name=fields.email.split("@")[0];
             toast.success(`${name} your account has been created successfully`);
         } catch (e) {

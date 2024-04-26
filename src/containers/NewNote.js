@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import "./NewNote.css";
 export default function NewNote() {
     const file = useRef(null);
-    const history = useNavigate();
+    const navigate = useNavigate();
     const [previewImage, setPreviewImage] = useState(null);
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -35,14 +35,17 @@ export default function NewNote() {
         try {
             const attachment = file.current ? await s3Upload(file.current) : null;
             await createNote({ content, attachment });
-            history("/");
+            navigate("/");
         } catch (e) {
             onError(e); setIsLoading(false);
         }
     }
     function createNote(note) {
         return API.post("notes", "/notes", {
-            body: note
+            body: {
+                ...note, 
+                content: note.content.trim() 
+            }
         });
     }
 

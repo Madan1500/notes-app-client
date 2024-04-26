@@ -3,6 +3,7 @@ import { Auth } from 'aws-amplify';
 import { onError } from '../libs/errorLib';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import "./PasswordReset.css"
 
@@ -32,6 +33,7 @@ const PasswordReset = () => {
     }
     try {
       await Auth.forgotPasswordSubmit(email, code, password);
+      toast.success("Password reset successfully");
       navigate("/login")
       
     } catch (error) {
