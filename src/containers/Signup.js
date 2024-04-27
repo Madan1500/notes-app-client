@@ -18,6 +18,7 @@ export default function Signup() {
     });
     const navigate = useNavigate();
     const [newUser, setNewUser] = useState(null);
+    const [showOverlay, setShowOverlay] = useState(false);
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
     function validateForm() {
@@ -32,6 +33,7 @@ export default function Signup() {
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
+        setShowOverlay(true);
         try {
             const newUser = await Auth.signUp({
                 username: fields.email,
@@ -41,22 +43,29 @@ export default function Signup() {
             setNewUser(newUser);
         } catch (e) {
             onError(e);
+            (e.code === "UsernameExistsException") ?
+                window.confirm("Do you want to login instead?") && navigate("/login") : <></>;
             setIsLoading(false);
+        } finally {
+            setShowOverlay(false);
         }
     }
     async function handleConfirmationSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
+        setShowOverlay(true);
         try {
             await Auth.confirmSignUp(fields.email, fields.confirmationCode);
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
             navigate("/");
-            const name=fields.email.split("@")[0];
+            const name = fields.email.split("@")[0];
             toast.success(`${name} your account has been created successfully`);
         } catch (e) {
             onError(e);
             setIsLoading(false);
+        } finally {
+            setShowOverlay(false);
         }
     }
 
@@ -87,57 +96,64 @@ export default function Signup() {
     }
     function renderForm() {
         return (
-            <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-        >
-            <Form onSubmit={handleSubmit}>
-                <h1 className="text-center">Signup</h1>
-                <Form.Group controlId="email" size="lg">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        autoFocus
-                        type="email"
-                        value={fields.email}
-                        onChange={handleFieldChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="password" size="lg">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={fields.password}
-                        onChange={handleFieldChange}
-                    />
-                </Form.Group>
-                <Form.Group controlId="confirmPassword" size="lg">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        value={fields.confirmPassword}
-                        onChange={handleFieldChange}
-                    />
-                </Form.Group>
-                <LoaderButton
-                    block
-                    size="lg"
-                    type="submit"
-                    isLoading={isLoading}
-                    disabled={!validateForm()}
-                >
-                    Signup
-                </LoaderButton>
-                <Form.Text className="text-muted mt-3">
-                    Already have an account?{" "}
-                    <Link to="/login" className="btn-link">Login</Link>
-                </Form.Text>
-            </Form>
-        </motion.div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Form onSubmit={handleSubmit}>
+                    <h1 className="text-center">Signup</h1>
+                    <Form.Group controlId="email" size="lg">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            autoFocus
+                            type="email"
+                            value={fields.email}
+                            onChange={handleFieldChange}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="password" size="lg">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={fields.password}
+                            onChange={handleFieldChange}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="confirmPassword" size="lg">
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            value={fields.confirmPassword}
+                            onChange={handleFieldChange}
+                        />
+                    </Form.Group>
+                    <LoaderButton
+                        block
+                        size="lg"
+                        type="submit"
+                        isLoading={isLoading}
+                        disabled={!validateForm()}
+                    >
+                        Signup
+                    </LoaderButton>
+                    <Form.Text className="text-muted mt-3">
+                        Already have an account?{" "}
+                        <Link to="/login" className="btn-link">Login</Link>
+                    </Form.Text>
+                </Form>
+            </motion.div>
         );
     }
     return (
         <div className="Signup">
+            {showOverlay && (
+                <div className="overlay">
+                    <div className="spinner-grow text-light" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            )}
             {newUser === null ? renderForm() : renderConfirmationForm()}
         </div>
     );

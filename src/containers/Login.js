@@ -13,6 +13,7 @@ export default function Login() {
     const navigate = useNavigate();
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
+    const [showOverlay, setShowOverlay] = useState(false);
     const [fields, handleFieldChange] = useFormFields({
         email: "",
         password: ""
@@ -23,20 +24,28 @@ export default function Login() {
     async function handleSubmit(event) {
         event.preventDefault();
         setIsLoading(true);
+        setShowOverlay(true);
         try {
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
             navigate("/");
-            const name=fields.email.split("@")[0].replace(/\d+$/, '');
-
+            const name = fields.email.split("@")[0].replace(/\d+$/, '');
             toast.success(`Welcome ${name}`);
+
         } catch (e) {
             toast.error(e.message);
             setIsLoading(false);
+        } finally {
+            setShowOverlay(false);
         }
     }
     return (
         <div className="Login">
+            {showOverlay && <div className="overlay">
+                <div class="spinner-grow text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>}
             <motion.div
                 className="Login"
                 initial={{ opacity: 0 }}
@@ -44,7 +53,7 @@ export default function Login() {
                 transition={{ duration: 0.5 }}
             >
                 <Form onSubmit={handleSubmit} className="shadow-lg p-3 mb-5 bg-white rounded">
-                <h1 className="text-center">Login</h1>
+                    <h1 className="text-center">Login</h1>
                     <Form.Group size="lg" controlId="email">
                         <Form.Label>Email</Form.Label>
                         <Form.Control
@@ -77,9 +86,9 @@ export default function Login() {
                     <Link to="/reset-password">Forgot Password ?</Link>
                     <Form.Text className="text-muted mt-3">
                         Don't have an account?{" "}
-                    <Link to="/signup" className="btn-link">
-                        Signup
-                    </Link>
+                        <Link to="/signup" className="btn-link">
+                            Signup
+                        </Link>
                     </Form.Text>
                 </Form>
             </motion.div>

@@ -56,3 +56,16 @@
 .Signup form button:hover {
     background: linear-gradient(90deg, rgb(19, 155, 30) 0%, rgb(20, 173, 79) 100%);
 }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(19, 17, 17, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
