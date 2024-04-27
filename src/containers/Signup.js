@@ -59,7 +59,7 @@ export default function Signup() {
             await Auth.signIn(fields.email, fields.password);
             userHasAuthenticated(true);
             navigate("/");
-            const name = fields.email.split("@")[0];
+            const name = fields.email.split("@")[0].replace(/\d+$/, '');
             toast.success(`${name} your account has been created successfully`);
         } catch (e) {
             onError(e);

@@ -4,3 +4,9 @@ aws cognito-idp admin-confirm-sign-up \
 --region YOUR_COGNITO_REGION \
 --user-pool-id YOUR_COGNITO_USER_POOL_ID \
 --username YOUR_USER_EMAIL
+
+
+ Created the lading effect on 27/04/2024 if the user is present and trying to again sign up then a message will appear user already exist and then anoher message will appear if 
+ the user wants to login
+
+Changed the landing page of my website in Home.js now the inserted item at last will be shown first. In Login.js added a loader logo which will load until the notes are fetched  

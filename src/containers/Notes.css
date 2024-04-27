@@ -7,7 +7,7 @@ body{
     color: white
 }
 
-img {
+.noteAttachment {
     max-width: 100%;
     float: right;
 }

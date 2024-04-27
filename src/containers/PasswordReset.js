@@ -13,6 +13,7 @@ const PasswordReset = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [reset, setReset] = useState(false);
+  const [showOverlay,setShowOverlay]= useState(false)
   const navigate=useNavigate()
 
   const handleForgotPassword = async (e) => {
@@ -31,6 +32,7 @@ const PasswordReset = () => {
       onError("Passwords do not match");
       return;
     }
+    setShowOverlay(true)
     try {
       await Auth.forgotPasswordSubmit(email, code, password);
       toast.success("Password reset successfully");
@@ -38,11 +40,20 @@ const PasswordReset = () => {
       
     } catch (error) {
       onError(error.message);
+    } finally{
+      setShowOverlay(false)
     }
   };
 
   return (
     <div className='forgotPassword'>
+      {showOverlay && (
+                <div className="overlay">
+                    <div className="spinner-grow text-light" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+      )}
     <Form onSubmit={reset ? handleResetPassword : handleForgotPassword} className="shadow-lg p-3 mb-5 bg-white rounded forgotPasswordForm">
     <h1 className="text-center">{reset ? 'Reset Password' : 'Forgot Password'}</h1>
     <Form.Group size="lg" controlId="email">
@@ -97,7 +108,7 @@ const PasswordReset = () => {
     <Button block size="lg" type="submit" className="rounded-pill">
       {reset ? 'Reset password' : 'Submit'}
     </Button>
-    {!reset && <Link to="/login">Back to Login</Link>}
+    {!reset && <Link className='backToLogin' to="/login">Back to Login</Link>}
   </Form>
   </div>
   );

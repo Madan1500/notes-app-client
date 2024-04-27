@@ -10,18 +10,22 @@ export default function Home() {
     const [notes, setNotes] = useState([]);
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
+    const [showOverlay, setShowOverlay] = useState(false)
     useEffect(() => {
         async function onLoad() {
             if (!isAuthenticated) {
                 return;
             }
+            setShowOverlay(true);
             try {
                 const notes = await loadNotes();
+                notes.sort((a, b) => b.createdAt - a.createdAt)
                 setNotes(notes);
             } catch (e) {
                 onError(e);
             }
             setIsLoading(false);
+            setShowOverlay(false);
         }
         onLoad();
     }, [isAuthenticated]);
@@ -57,8 +61,12 @@ export default function Home() {
     function renderLander() {
         return (
             <div className="lander">
-                <h1>Scratch</h1>
-                <p className="text-muted">A simple note taking app created by <strong>MADAN</strong></p>
+                <div className="background-image">
+                    <div className="overlay-text">
+                        <h1>Scratch</h1>
+                        <p className="text-muted">A simple note taking app created by <strong>MADAN</strong></p>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -67,7 +75,10 @@ export default function Home() {
         return (
             <div className="notes">
                 <h2 className="pb-3 mt-4 mb-3 border-bottom">Your Notes</h2>
-                <ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+                {(isLoading) ? <div className="notesLoader">{showOverlay && <div className="spinner-border text-info" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>}</div> : <ListGroup>{renderNotesList(notes)}</ListGroup>}
+
             </div>
         );
     }

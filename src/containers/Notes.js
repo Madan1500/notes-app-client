@@ -159,6 +159,7 @@ export default function Notes() {
                     </Form.Group>
                     {note.attachmentURL && (
                         <img src={note.attachmentURL}
+                            className="noteAttachment"
                             alt="Note attachment"
                             style={{
                                 maxWidth: '100%',
