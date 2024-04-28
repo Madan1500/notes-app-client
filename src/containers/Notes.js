@@ -9,16 +9,20 @@ import "./Notes.css";
 import { s3Upload } from "../libs/awsLib";
 import { Link } from "react-router-dom";
 import { FaArrowCircleLeft } from "react-icons/fa";
+import { toast } from 'react-toastify';
+import FadeLoader from "react-spinners/FadeLoader";
+
 
 export default function Notes() {
     const [isLoading, setIsLoading] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-
+    const [showOverlay, setShowOverlay] = useState(false);
     const file = useRef(null);
     const { id } = useParams();
     const navigate = useNavigate();
     const [note, setNote] = useState(null);
     const [content, setContent] = useState("");
+    const [savingOverlay, setSavingOverlay] = useState(false)
     useEffect(() => {
         async function loadNote() {
             return API.get("notes", `/notes/${id}`);
@@ -38,7 +42,7 @@ export default function Notes() {
         }
         onLoad();
         console.log("Hi")
-    },[id]);
+    }, [id]);
     function validateForm() {
         return content.length > 0;
     }
@@ -60,7 +64,7 @@ export default function Notes() {
         try {
             if (file.current) {
                 const reader = new FileReader();
-                reader.onloadend = function() {
+                reader.onloadend = function () {
                     setNote(prevState => ({
                         ...prevState,
                         attachmentURL: reader.result
@@ -71,7 +75,7 @@ export default function Notes() {
         } catch (e) {
             onError(e);
         }
-    
+
         setIsLoading(false);
     }
     function saveNote(note) {
@@ -81,11 +85,10 @@ export default function Notes() {
     }
     async function handleSave() {
         setIsLoading(true);
-    
         try {
             if (file.current) {
                 if (note.attachment) {
-                    const attachmentKey = note.attachment.split('/').pop(); 
+                    const attachmentKey = note.attachment.split('/').pop();
                     await Storage.remove(attachmentKey, { level: 'private' });
                 }
                 const attachment = await s3Upload(file.current);
@@ -99,7 +102,7 @@ export default function Notes() {
         } catch (e) {
             onError(e);
         }
-    
+
         setIsLoading(false);
     }
     async function handleSubmit(event) {
@@ -113,6 +116,7 @@ export default function Notes() {
             return;
         }
         setIsLoading(true);
+        setSavingOverlay(true)
         try {
             if (file.current) {
                 attachment = await s3Upload(file.current);
@@ -125,18 +129,20 @@ export default function Notes() {
         } catch (e) {
             onError(e);
             setIsLoading(false);
+        } finally {
+            setSavingOverlay(false)
         }
     }
 
 
     async function deleteNote() {
-        if(note.attachment){
-            const attachmentKey = note.attachment.split('/').pop(); 
+        if (note.attachment) {
+            const attachmentKey = note.attachment.split('/').pop();
             await Storage.remove(attachmentKey, { level: 'private' });
         }
         return await API.del("notes", `/notes/${id}`);
     }
-    
+
     async function handleDelete(event) {
         event.preventDefault();
         const confirmed = window.confirm(
@@ -146,13 +152,18 @@ export default function Notes() {
             return;
         }
         setIsDeleting(true);
+        setShowOverlay(true)
         try {
             await deleteNote();
             navigate("/");
         } catch (e) {
             onError(e);
             setIsDeleting(false);
+        } finally {
+            setShowOverlay(false)
+            toast.success("Deleted Successfully")
         }
+        setIsDeleting(false);
     }
 
     return (
@@ -210,7 +221,12 @@ export default function Notes() {
                         Delete
                     </LoaderButton>
                 </Form>
-            )}
+            )}{showOverlay && <div className="overlay">
+                <div className="spinner-grow  text-danger" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </div>}
+            {savingOverlay && <div className="overlay"><FadeLoader color={"#123abc"} loading={isLoading} /></div>}
         </div>
     );
 
