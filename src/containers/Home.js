@@ -6,6 +6,7 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import { API, Storage } from "aws-amplify";
 import { toast } from 'react-toastify';
+import PacmanLoader from "react-spinners/PacmanLoader"
 import "./Home.css";
 export default function Home() {
     const [notes, setNotes] = useState([]);
@@ -114,9 +115,7 @@ export default function Home() {
                     >
                         {isDeleting ? 'Deleting...' : 'Delete Selected'}
                         {showOverlay && <div className="overlay">
-                            <div className="spinner-grow  text-danger" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div>
+                        <PacmanLoader color="#e01010" />
                         </div>}
                     </button>
                 )}

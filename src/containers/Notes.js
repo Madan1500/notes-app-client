@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import FadeLoader from "react-spinners/FadeLoader";
+import PacmanLoader from "react-spinners/PacmanLoader"
 
 
 export default function Notes() {
@@ -41,7 +42,6 @@ export default function Notes() {
             }
         }
         onLoad();
-        console.log("Hi")
     }, [id]);
     function validateForm() {
         return content.length > 0;
@@ -222,11 +222,9 @@ export default function Notes() {
                     </LoaderButton>
                 </Form>
             )}{showOverlay && <div className="overlay">
-                <div className="spinner-grow  text-danger" role="status">
-                    <span className="sr-only">Loading...</span>
-                </div>
+                <PacmanLoader color="#e01010" />
             </div>}
-            {savingOverlay && <div className="overlay"><FadeLoader color={"#123abc"} loading={isLoading} /></div>}
+            {savingOverlay && <div className="overlay"><FadeLoader color={"#123abc"} /></div>}
         </div>
     );
 

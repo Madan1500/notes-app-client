@@ -8,6 +8,7 @@ import config from "../config";
 import { s3Upload } from "../libs/awsLib";
 import {FaArrowCircleLeft} from "react-icons/fa";
 import { Link } from "react-router-dom";
+import FadeLoader from "react-spinners/FadeLoader"
 import "./NewNote.css";
 export default function NewNote() {
     const file = useRef(null);
@@ -15,6 +16,7 @@ export default function NewNote() {
     const [previewImage, setPreviewImage] = useState(null);
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [overlay,setOverlay]= useState(false)
     function validateForm() {
         return content.length > 0;
     }
@@ -32,6 +34,7 @@ export default function NewNote() {
             return;
         }
         setIsLoading(true);
+        setOverlay(true)
         try {
             const attachment = file.current ? await s3Upload(file.current) : null;
             await createNote({ content, attachment });
@@ -39,6 +42,8 @@ export default function NewNote() {
         } catch (e) {
             onError(e); 
             setIsLoading(false);
+        } finally {
+            setOverlay(false)
         }
     }
     function createNote(note) {
@@ -83,6 +88,7 @@ export default function NewNote() {
                     Create
                 </LoaderButton>
             </Form>
+            {overlay && <div className="overlay"><FadeLoader color={"#36d7b7"} /></div>}
         </div>
     );
 }
