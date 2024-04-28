@@ -37,7 +37,8 @@ export default function Notes() {
             }
         }
         onLoad();
-    }, [id]);
+        console.log("Hi")
+    },[id]);
     function validateForm() {
         return content.length > 0;
     }
@@ -83,6 +84,10 @@ export default function Notes() {
     
         try {
             if (file.current) {
+                if (note.attachment) {
+                    const attachmentKey = note.attachment.split('/').pop(); 
+                    await Storage.remove(attachmentKey, { level: 'private' });
+                }
                 const attachment = await s3Upload(file.current);
                 const attachmentURL = await Storage.vault.get(attachment);
                 await updateNote(attachment);
