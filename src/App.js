@@ -34,7 +34,7 @@ function App() {
     await Auth.signOut();
     userHasAuthenticated(false);
     navigate("/login");
-    toast.success("You have successfully logged out. Have a nice day and we look forward to seeing you again soon.")
+    toast.success("Have a nice day and we look forward to seeing you again soon.")
   }
 
   return (
