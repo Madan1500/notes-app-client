@@ -5,12 +5,15 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import { API } from "aws-amplify";
+import { toast } from 'react-toastify';
 import "./Home.css";
 export default function Home() {
     const [notes, setNotes] = useState([]);
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
     const [showOverlay, setShowOverlay] = useState(false)
+    const [selectedNotes, setSelectedNotes] = useState([]);
+    const [isDeleting, setIsDeleting] = useState(false)
     useEffect(() => {
         async function onLoad() {
             if (!isAuthenticated) {
@@ -32,7 +35,47 @@ export default function Home() {
     function loadNotes() {
         return API.get("notes", "/notes");
     }
+    function handleSelect(noteId) {
+        setSelectedNotes(prev => {
+            if (prev.includes(noteId)) {
+                return prev.filter(id => id !== noteId);
+            } else {
+                return [...prev, noteId];
+            }
+        });
+        if (selectedNotes.length) {
+            console.log(selectedNotes)
+        }
+    }
+    function deleteNote(noteId) {
+        return API.del("notes", `/notes/${noteId}`);
+    }
 
+    async function handleDeleteSelected() {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete the selected notes?"
+        );
+        if (!confirmed) {
+            return;
+        }
+        setIsDeleting(true);
+        try {
+            setShowOverlay(true)
+            for (let noteId of selectedNotes) {
+                await deleteNote(noteId);
+            }
+            const notes = await loadNotes();
+            notes.sort((a, b) => b.createdAt - a.createdAt)
+            setNotes(notes);
+            setSelectedNotes([]);
+        } catch (e) {
+            onError(e);
+        } finally {
+            setShowOverlay(false)
+            toast.success("Deleted Successfully")
+        }
+        setIsDeleting(false);
+    }
     function renderNotesList(notes) {
         return (
             <>
@@ -52,9 +95,29 @@ export default function Home() {
                             <span className="text-muted">
                                 Created: {new Date(createdAt).toLocaleString()}
                             </span>
+                            <input
+                                style={{ float: "right", transform: "scale(1.5)" }}
+                                type="checkbox"
+                                onClick={(event) => event.stopPropagation()}
+                                onChange={() => handleSelect(noteId)}
+                            />
                         </ListGroup.Item>
                     </LinkContainer>
                 ))}
+                {selectedNotes.length > 0 && (
+                    <button
+                        className="btn btn-danger"
+                        onClick={handleDeleteSelected}
+                        disabled={isDeleting}
+                    >
+                        {isDeleting ? 'Deleting...' : 'Delete Selected'}
+                        {showOverlay && <div className="overlay">
+                            <div className="spinner-grow  text-danger" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                        </div>}
+                    </button>
+                )}
             </>
         );
     }
