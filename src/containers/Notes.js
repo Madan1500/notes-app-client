@@ -124,9 +124,14 @@ export default function Notes() {
     }
 
 
-    function deleteNote() {
-        return API.del("notes", `/notes/${id}`);
+    async function deleteNote() {
+        if(note.attachment){
+            const attachmentKey = note.attachment.split('/').pop(); 
+            await Storage.remove(attachmentKey, { level: 'private' });
+        }
+        return await API.del("notes", `/notes/${id}`);
     }
+    
     async function handleDelete(event) {
         event.preventDefault();
         const confirmed = window.confirm(

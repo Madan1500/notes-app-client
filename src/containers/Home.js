@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
-import { API } from "aws-amplify";
+import { API, Storage } from "aws-amplify";
 import { toast } from 'react-toastify';
 import "./Home.css";
 export default function Home() {
@@ -43,12 +43,14 @@ export default function Home() {
                 return [...prev, noteId];
             }
         });
-        if (selectedNotes.length) {
-            console.log(selectedNotes)
-        }
     }
-    function deleteNote(noteId) {
-        return API.del("notes", `/notes/${noteId}`);
+    async function deleteNote(noteId) {
+        const note = await API.get("notes", `/notes/${noteId}`);
+        if (note.attachment) {
+            const attachmentKey = note.attachment.split('/').pop(); 
+            await Storage.remove(attachmentKey, { level: 'private' });
+        }
+        return await API.del("notes", `/notes/${noteId}`);
     }
 
     async function handleDeleteSelected() {

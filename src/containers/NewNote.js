@@ -37,7 +37,8 @@ export default function NewNote() {
             await createNote({ content, attachment });
             navigate("/");
         } catch (e) {
-            onError(e); setIsLoading(false);
+            onError(e); 
+            setIsLoading(false);
         }
     }
     function createNote(note) {
@@ -68,7 +69,7 @@ export default function NewNote() {
                         <img
                             src={previewImage}
                             alt="Preview"
-                            style={{ maxWidth: '100%', height: '200px', objectFit: 'contain' }}
+                            style={{ maxWidth: '100%', height: '200px', objectFit: 'contain',float: 'right'}}
                         />
                     )}
                 </Form.Group>
