@@ -17,12 +17,18 @@ export default function NewNote() {
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [overlay,setOverlay]= useState(false)
+    const [attachment,setAttachment]=useState(false)
+    const [imageName, setImageName] = useState("");
     function validateForm() {
         return content.length > 0;
     }
     function handleFileChange(event) {
-        file.current = event.target.files[0];
-        setPreviewImage(URL.createObjectURL(file.current));
+        if (event.target.files.length > 0) {
+            file.current = event.target.files[0];
+            setPreviewImage(URL.createObjectURL(file.current));
+            setImageName(file.current.name);
+            setAttachment(true);
+        }
     }
     async function handleSubmit(event) {
         event.preventDefault();
@@ -68,8 +74,9 @@ export default function NewNote() {
                     />
                 </Form.Group>
                 <Form.Group controlId="file">
-                    <Form.Label>Attachment</Form.Label>
+                    <Form.Label>{attachment?"Attachment":"Add Attachment"}</Form.Label>
                     <Form.Control onChange={handleFileChange} type="file" />
+                    {attachment?<p className="selectedImageName">{imageName}</p>:<></>}
                     {previewImage && (
                         <img
                             src={previewImage}
