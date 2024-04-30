@@ -1,18 +1,18 @@
 const config = {
-    MAX_ATTACHMENT_SIZE: 5000000,
+    MAX_ATTACHMENT_SIZE: process.env.REACT_APP_MAX_ATTACHMENT_SIZE,
     s3: {
-        REGION: "us-east-1",
-        BUCKET: "aws-new-bucket-us-east-1",
+        REGION: process.env.REACT_APP_REGION,
+        BUCKET: process.env.REACT_APP_BUCKET,
     },
     apiGateway: {
-        REGION: "us-east-1",
-        URL: "https://0t0lmawfq0.execute-api.us-east-1.amazonaws.com/prod",
+        REGION: process.env.REACT_APP_REGION,
+        URL: process.env.REACT_APP_API_GATEWAY_URL,
     },
     cognito: {
-        REGION: "us-east-1",
-        USER_POOL_ID: "us-east-1_owsd2wJ8u",
-        APP_CLIENT_ID: "5a6r39od0m3kdhmu83dqp8bu9g",
-        IDENTITY_POOL_ID: "us-east-1:39c953e6-a797-4146-a293-516792073cc2",
+        REGION: process.env.REACT_APP_REGION,
+        USER_POOL_ID: process.env.REACT_APP_USER_POOL_ID,
+        APP_CLIENT_ID: process.env.REACT_APP_APP_CLIENT_ID,
+        IDENTITY_POOL_ID: process.env.REACT_APP_IDENTITY_POOL_ID,
     },
 };
 
