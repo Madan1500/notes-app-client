@@ -1,3 +1,4 @@
+
 const config = {
     MAX_ATTACHMENT_SIZE: process.env.REACT_APP_MAX_ATTACHMENT_SIZE,
     s3: {
