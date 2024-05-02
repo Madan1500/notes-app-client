@@ -28,3 +28,16 @@ body{
     justify-content: center;
     align-items: center;
 }
+.imgName{
+    padding: 15px;
+    border:1px solid white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.imgName .cross-note{
+    font-size: 20px;
+    color: red;
+    cursor: pointer;
+}

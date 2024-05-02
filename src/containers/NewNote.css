@@ -42,3 +42,12 @@
     color: red;
     transition: color 0.3s;
 }
+.cross-hover:hover{
+    text-decoration: line-through;
+    text-decoration-color: yellowgreen !important;
+}
+@media screen and (max-width:700px){
+    .selectedImageName{
+        font-size: 1rem;
+    }
+}

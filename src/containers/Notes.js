@@ -12,6 +12,7 @@ import { FaArrowCircleLeft } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import FadeLoader from "react-spinners/FadeLoader";
 import PacmanLoader from "react-spinners/PacmanLoader"
+import { ImCross } from "react-icons/im";
 
 
 export default function Notes() {
@@ -165,7 +166,29 @@ export default function Notes() {
         }
         setIsDeleting(false);
     }
+    async function handleRemove() {
+        if (note.attachment) {
+            const attachmentKey = note.attachment.split('/').pop();
+            const confirmation=window.confirm(`Do you really want to delete`)
+            if(!confirmation) return
+            try {
+                setShowOverlay(true)
+                await Storage.remove(attachmentKey, { level: 'private' });
+                
 
+                const updatedNote = { ...note, attachment: "", attachmentURL: "" };
+                await API.put("notes", `/notes/${note.noteId}`, { body: updatedNote });
+                
+
+                setNote(updatedNote);
+                toast.success("Image removed successfully");
+            } catch (e) {
+                onError(e);
+            } finally{
+                setShowOverlay(false)
+            }
+        }
+    }
     return (
         <div className="Notes">
             {note && (
@@ -191,13 +214,16 @@ export default function Notes() {
                     <Form.Group controlId="file">
                         <Form.Label>Attachment</Form.Label>
                         {note.attachment && (
-                            <p>
+                            <p className="imgName">
                                 <Link
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href={note.attachmentURL}
                                 >{formatFilename(note.attachment)}
                                 </Link>
+                                <ImCross className="cross-note"
+                                    onClick={handleRemove}
+                                />
                             </p>
                         )}
                         <Form.Control onChange={handleFileChange} type="file" />

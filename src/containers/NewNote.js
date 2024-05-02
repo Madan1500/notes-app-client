@@ -20,6 +20,7 @@ export default function NewNote() {
     const [overlay, setOverlay] = useState(false)
     const [attachment, setAttachment] = useState(false)
     const [imageName, setImageName] = useState("");
+    const [isCrossHovered, setIsCrossHovered] = useState(false);
     function validateForm() {
         return content.length > 0;
     }
@@ -86,8 +87,13 @@ export default function NewNote() {
                         <Form.Control onChange={handleFileChange} type="file" style={{ display: 'none' }} />
                         <button type="button" className="btn btn-info" onClick={() => document.getElementById('file').click()}>Choose File</button>
                     </div>
-                    {attachment && <p className="selectedImageName">{imageName}
-                        <ImCross className="cross" onClick={handleRemove} />
+                    {attachment && <p className={`selectedImageName ${isCrossHovered ? 'cross-hover' : ''}`}>{imageName}
+                        <ImCross
+                            className="cross"
+                            onClick={handleRemove}
+                            onMouseEnter={() => setIsCrossHovered(true)}
+                            onMouseLeave={() => setIsCrossHovered(false)}
+                        />
                     </p>}
                     {previewImage && (
                         <img
