@@ -6,9 +6,10 @@ import { onError } from "../libs/errorLib";
 import { API } from "aws-amplify";
 import config from "../config";
 import { s3Upload } from "../libs/awsLib";
-import {FaArrowCircleLeft} from "react-icons/fa";
+import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FadeLoader from "react-spinners/FadeLoader"
+import { ImCross } from "react-icons/im";
 import "./NewNote.css";
 export default function NewNote() {
     const file = useRef(null);
@@ -16,8 +17,8 @@ export default function NewNote() {
     const [previewImage, setPreviewImage] = useState(null);
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [overlay,setOverlay]= useState(false)
-    const [attachment,setAttachment]=useState(false)
+    const [overlay, setOverlay] = useState(false)
+    const [attachment, setAttachment] = useState(false)
     const [imageName, setImageName] = useState("");
     function validateForm() {
         return content.length > 0;
@@ -46,7 +47,7 @@ export default function NewNote() {
             await createNote({ content, attachment });
             navigate("/");
         } catch (e) {
-            onError(e); 
+            onError(e);
             setIsLoading(false);
         } finally {
             setOverlay(false)
@@ -55,16 +56,22 @@ export default function NewNote() {
     function createNote(note) {
         return API.post("notes", "/notes", {
             body: {
-                ...note, 
-                content: note.content.trim() 
+                ...note,
+                content: note.content.trim()
             }
         });
+    }
+    function handleRemove() {
+        setPreviewImage(null);
+        setAttachment(false);
+        setImageName("");
+        file.current = null;
     }
 
     return (
         <div className="NewNote">
             <Form onSubmit={handleSubmit}>
-            <Link to={"/"} className="back"><FaArrowCircleLeft /></Link>
+                <Link to={"/"} className="back"><FaArrowCircleLeft /></Link>
                 <Form.Group controlId="content">
                     <Form.Control
                         value={content}
@@ -74,14 +81,19 @@ export default function NewNote() {
                     />
                 </Form.Group>
                 <Form.Group controlId="file">
-                    <Form.Label>{attachment?"Attachment":"Add Attachment"}</Form.Label>
-                    <Form.Control onChange={handleFileChange} type="file" />
-                    {attachment?<p className="selectedImageName">{imageName}</p>:<></>}
+                    <Form.Label>{attachment ? "Attachment" : "Add Attachment"}</Form.Label>
+                    <div className="custom-file-upload">
+                        <Form.Control onChange={handleFileChange} type="file" style={{ display: 'none' }} />
+                        <button type="button" className="btn btn-info" onClick={() => document.getElementById('file').click()}>Choose File</button>
+                    </div>
+                    {attachment && <p className="selectedImageName">{imageName}
+                        <ImCross className="cross" onClick={handleRemove} />
+                    </p>}
                     {previewImage && (
                         <img
                             src={previewImage}
                             alt="Preview"
-                            style={{ maxWidth: '100%', height: '200px', objectFit: 'contain',float: 'right'}}
+                            style={{ maxWidth: '100%', height: '200px', objectFit: 'contain', float: 'right' }}
                         />
                     )}
                 </Form.Group>

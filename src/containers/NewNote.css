@@ -17,6 +17,28 @@
 }
 
 .selectedImageName{
+    border:1px inset white;
+    padding: 10px;
+    border-radius: 20px;
     font-size: 1.2rem;
     padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.selectedImageName:hover{
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s;
+    color: blue;
+}
+
+.cross{
+    cursor: pointer;
+    color: white;
+    font-size: 1.3rem;
+}
+.cross:hover{
+    color: red;
+    transition: color 0.3s;
 }
