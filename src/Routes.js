@@ -9,6 +9,8 @@ import Notes from "./containers/Notes";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import PasswordReset from "./containers/PasswordReset";
+import ForgotEmail from "./containers/ForgotEmail";
+import ConfirmEmail from "./containers/ConfirmEmail";
 
 export default function Routes() {
     return (
@@ -16,6 +18,8 @@ export default function Routes() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />}></Route>
             <Route path="/signup" element={<Signup />}></Route>
+            <Route path="/forgotEmail" element={<ForgotEmail />}></Route>
+            <Route path="/confirmEmail" element={<ConfirmEmail />}></Route>
             <Route exact path="/notes/new" element={<NewNote />}></Route>
             <Route exact path="/notes/:id" element={<Notes />}>
             </Route>

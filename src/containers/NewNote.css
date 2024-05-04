@@ -16,8 +16,8 @@
     align-items: center;
 }
 
-.selectedImageName{
-    border:1px inset white;
+.selectedImageName {
+    border: 1px inset white;
     padding: 10px;
     border-radius: 20px;
     font-size: 1.2rem;
@@ -27,27 +27,41 @@
     align-items: center;
     margin-top: 10px;
 }
-.selectedImageName:hover{
+
+.selectedImageName:hover {
     background-color: rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s;
     color: blue;
 }
 
-.cross{
+.cross {
     cursor: pointer;
     color: white;
     font-size: 1.3rem;
 }
-.cross:hover{
+
+.cross:hover {
     color: red;
     transition: color 0.3s;
 }
-.cross-hover:hover{
+
+.cross-hover:hover {
     text-decoration: line-through;
     text-decoration-color: yellowgreen !important;
 }
-@media screen and (max-width:700px){
-    .selectedImageName{
+
+.create-previewImage {
+    max-width: 100%;
+    height: 200px;
+    object-fit: contain;
+    float: right;
+    filter: drop-shadow(5px 5px 15px #332ba6);
+    border:12px ridge rgb(34, 36, 170);
+    margin-bottom: 12px;
+}
+
+@media screen and (max-width:700px) {
+    .selectedImageName {
         font-size: 1rem;
     }
 }

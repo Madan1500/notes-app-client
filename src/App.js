@@ -9,6 +9,7 @@ import { AppContext } from "./libs/contextLib";
 import { useNavigate } from "react-router-dom";
 import { onError } from "./libs/errorLib";
 import { toast } from 'react-toastify';
+import { NavDropdown } from 'react-bootstrap';
 
 function App() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -49,7 +50,15 @@ function App() {
           <Navbar.Toggle /><Navbar.Collapse className="justify-content-end">
             <Nav activeKey={window.location.pathname}>
               {isAuthenticated ? (
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                <>
+                  <NavDropdown title="Settings" id="basic-nav-dropdown">
+                    <LinkContainer to="/forgotEmail">
+                      <NavDropdown.Item>Forgot Email</NavDropdown.Item>
+                    </LinkContainer>
+                    {/* Add more <LinkContainer> components for other options */}
+                  </NavDropdown>
+                  <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                </>
               ) : (
                 <>
                   <LinkContainer to="/signup">

@@ -99,7 +99,7 @@ export default function NewNote() {
                         <img
                             src={previewImage}
                             alt="Preview"
-                            style={{ maxWidth: '100%', height: '200px', objectFit: 'contain', float: 'right' }}
+                            className="create-previewImage"
                         />
                     )}
                 </Form.Group>
