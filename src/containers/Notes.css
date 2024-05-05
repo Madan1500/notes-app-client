@@ -9,7 +9,13 @@ body{
 
 .noteAttachment {
     max-width: 100%;
-    float: right;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    box-shadow: rgb(53, 105, 161) 0px 20px 30px -10px;
+}
+.noteAttachment:hover {
+    cursor: zoom-in;
 }
 
 .back {
@@ -40,4 +46,22 @@ body{
     font-size: 20px;
     color: red;
     cursor: pointer;
+}
+
+.zoomIn{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(3);
+    z-index: 100;
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    cursor: zoom-out;
+}
+
+@media (min-width: 768px) {
+    .noteAttachment{
+        float: right;
+    }
 }

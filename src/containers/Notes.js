@@ -25,6 +25,7 @@ export default function Notes() {
     const [note, setNote] = useState(null);
     const [content, setContent] = useState("");
     const [savingOverlay, setSavingOverlay] = useState(false)
+    const [isZoomIn, setIsZoomIn] = useState(false)
     useEffect(() => {
         async function loadNote() {
             return API.get("notes", `/notes/${id}`);
@@ -203,12 +204,16 @@ export default function Notes() {
                     </Form.Group>
                     {note.attachmentURL && (
                         <img src={note.attachmentURL}
-                            className="noteAttachment"
+                            className={`${isZoomIn?"zoomIn":"noteAttachment"}`}
                             alt="Note attachment"
+                            onClick={() => {
+                                setIsZoomIn(!isZoomIn);
+                            }}
                             style={{
                                 maxWidth: '100%',
                                 height: '200px',
-                                objectFit: 'contain'
+                                objectFit: 'contain',
+                                borderRadius: '10px'
                             }} />
                     )}
                     <Form.Group controlId="file">
