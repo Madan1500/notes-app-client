@@ -63,5 +63,6 @@ body{
 @media (min-width: 768px) {
     .noteAttachment{
         float: right;
+        margin: 10px;
     }
 }
