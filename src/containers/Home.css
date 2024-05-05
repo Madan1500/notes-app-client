@@ -65,3 +65,38 @@
     justify-content: center;
     align-items: center;
 }
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #1b8a6e;
+    text-align: center;
+    padding: 10px;
+}
+.footer:hover {
+    background-color: #1b8a6e;
+}
+.footer a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+.footer a p {
+    margin: 0;
+    padding: 0;
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+.footer a p:hover {
+    color: #fff;
+}
+.footer a .github-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}

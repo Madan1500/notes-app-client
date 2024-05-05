@@ -6,7 +6,8 @@ import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib";
 import { API, Storage } from "aws-amplify";
 import { toast } from 'react-toastify';
-import PacmanLoader from "react-spinners/PacmanLoader"
+import PacmanLoader from "react-spinners/PacmanLoader";
+import { FaGithub } from "react-icons/fa";
 import "./Home.css";
 export default function Home() {
     const [notes, setNotes] = useState([]);
@@ -48,7 +49,7 @@ export default function Home() {
     async function deleteNote(noteId) {
         const note = await API.get("notes", `/notes/${noteId}`);
         if (note.attachment) {
-            const attachmentKey = note.attachment.split('/').pop(); 
+            const attachmentKey = note.attachment.split('/').pop();
             await Storage.remove(attachmentKey, { level: 'private' });
         }
         return await API.del("notes", `/notes/${noteId}`);
@@ -115,7 +116,7 @@ export default function Home() {
                     >
                         {isDeleting ? 'Deleting...' : 'Delete Selected'}
                         {showOverlay && <div className="overlay">
-                        <PacmanLoader color="#e01010" />
+                            <PacmanLoader color="#e01010" />
                         </div>}
                     </button>
                 )}
@@ -123,7 +124,7 @@ export default function Home() {
         );
     }
     function renderLander() {
-        return (
+        return (<>
             <div className="lander">
                 <div className="background-image">
                     <div className="overlay-text">
@@ -132,6 +133,13 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+            <ListGroup.Item action className="footer">
+                <a href="https://github.com/Madan1500/notes-app-client" target="_blank" rel="noopener noreferrer">
+                    <FaGithub className="github-logo"/>
+                    <p>Github</p>
+                </a>
+            </ListGroup.Item>
+        </>
         );
     }
 
