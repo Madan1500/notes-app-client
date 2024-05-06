@@ -43,8 +43,17 @@ export default function Signup() {
             setNewUser(newUser);
         } catch (e) {
             onError(e);
-            (e.code === "UsernameExistsException") ?
-                window.confirm("Do you want to login instead?") && navigate("/login") : <></>;
+            if(e.name === "UsernameExistsException"){
+                try {
+                    await Auth.resendSignUp(fields.email);
+                    toast.info("A verification code has been sent to your email address");
+                    setIsLoading(false);
+                    setNewUser(true)
+                } catch (e) {
+                    onError(e);
+                    setIsLoading(false);
+                }
+            }
             setIsLoading(false);
         } finally {
             setShowOverlay(false);
