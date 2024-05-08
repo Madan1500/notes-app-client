@@ -35,6 +35,21 @@ export default function Login() {
         } catch (e) {
             toast.error(e.message);
             setIsLoading(false);
+            if (e.code === 'UserNotConfirmedException') {
+                // The user is not confirmed
+                console.log('User is not confirmed');
+                try {
+                    await Auth.resendSignUp(fields.email);
+                    navigate("/confirm-signup", { state: { email: fields.email, password: fields.password } });
+                    toast.info("A verification code has been sent to your email address");
+                } catch (resendError) {
+                    toast.error(resendError.message);
+                }
+            } else {
+                // Some other error occurred
+                console.error(e.code, e.message);
+                toast.error(e.message);
+            }
         } finally {
             setShowOverlay(false);
         }

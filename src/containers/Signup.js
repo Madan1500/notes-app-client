@@ -42,16 +42,9 @@ export default function Signup() {
             setIsLoading(false);
             setNewUser(newUser);
         } catch (e) {
-            if(e.name === "UsernameExistsException"){
-                try {
-                    await Auth.resendSignUp(fields.email);
-                    toast.info("A verification code has been sent to your email address");
-                    setIsLoading(false);
-                    setNewUser(true)
-                } catch (e) {
-                    onError(e);
-                    setIsLoading(false);
-                }
+            if(e.code === "UsernameExistsException"){
+                toast.error("User already exists with the email address provided");
+                window.confirm("User already exists with the email address provided. Do you want to login instead?") && navigate("/login");
             }
             setIsLoading(false);
         } finally {

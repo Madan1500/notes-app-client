@@ -10,3 +10,39 @@ aws cognito-idp admin-confirm-sign-up \
  the user wants to login
 
 Changed the landing page of my website in Home.js now the inserted item at last will be shown first. In Login.js added a loader logo which will load until the notes are fetched  
+--------------------------------------------------------------------------
+Sign up
+Auth.signUp({
+    username: 'your_username',
+    password: 'your_password',
+    attributes: {
+        email: 'your_email',
+        // other custom attributes 
+    }
+})
+--------------------------------------------------------------------------
+Auth.signIn(username, password): This method is used to sign in an existing user. It takes the username and password as parameters.
+
+Auth.signIn('your_username', 'your_password');
+
+--------------------------------------------------------------------------
+
+Auth.confirmSignUp(username, code): This method is used to confirm a new user's account. It takes the username and the confirmation code as parameters.
+
+Auth.confirmSignUp('your_username', 'your_confirmation_code');
+
+--------------------------------------------------------------------------
+Auth.resendSignUp(username); 
+    This method is used to resend the confirmation code to a user. It takes the username as a parameter.
+--------------------------------------------------------------------------
+Auth.signOut();
+ This method is used to sign out the current user.
+--------------------------------------------------------------------------
+Auth.currentAuthenticatedUser()
+ This method is used to get the current authenticated user.
+--------------------------------------------------------------------------
+Auth.changePassword(user, oldPassword, newPassword): This method is used to change a user's password. It takes the user, the old password, and the new password as parameters.
+--------------------------------------------------------------------------
+Auth.forgotPassword(username): This method is used to initiate the forgot password process for a user. It takes the username as a parameter.
+--------------------------------------------------------------------------
+Auth.forgotPasswordSubmit(username, code, newPassword): This method is used to complete the forgot password process. It takes the username, the confirmation code, and the new password as parameters.

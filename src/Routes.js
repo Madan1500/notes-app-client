@@ -11,6 +11,7 @@ import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import PasswordReset from "./containers/PasswordReset";
 import ForgotEmail from "./containers/ForgotEmail";
 import ConfirmEmail from "./containers/ConfirmEmail";
+import ConfirmSignup from "./containers/ConfirmSignup";
 
 export default function Routes() {
     return (
@@ -28,6 +29,7 @@ export default function Routes() {
             <Route path="/signup" element={<UnauthenticatedRoute><Signup /></UnauthenticatedRoute>} />
             <Route path="/notes/new" element={<AuthenticatedRoute><NewNote /></AuthenticatedRoute>} />
             <Route path="/notes/:id" element={<AuthenticatedRoute><Notes /></AuthenticatedRoute>} />
+            <Route path="/confirm-signup" element={<ConfirmSignup />} />
             <Route path="*" element={<NotFound></NotFound>}></Route>
 
         </Router>
