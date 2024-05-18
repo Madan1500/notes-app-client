@@ -8,6 +8,7 @@ import { API, Storage } from "aws-amplify";
 import { toast } from 'react-toastify';
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { FaGithub } from "react-icons/fa";
+import { Form, Button } from 'react-bootstrap';
 import "./Home.css";
 export default function Home() {
     const [notes, setNotes] = useState([]);
@@ -15,7 +16,9 @@ export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [showOverlay, setShowOverlay] = useState(false)
     const [selectedNotes, setSelectedNotes] = useState([]);
-    const [isDeleting, setIsDeleting] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [filteredNotes, setFilteredNotes] = useState([])
+    const [dateInput, setDateInput] = useState("");
     useEffect(() => {
         async function onLoad() {
             if (!isAuthenticated) {
@@ -80,34 +83,73 @@ export default function Home() {
         }
         setIsDeleting(false);
     }
+    function handleDateChange(event) {
+        const date = event.target.value;
+        setDateInput(date);
+        if (date) {
+            const formattedDate = new Date(date).toLocaleDateString();
+            const filtered = notes.filter((note) => {
+                const noteDate = new Date(note.createdAt).toLocaleDateString();
+                return noteDate === formattedDate;
+            });
+            setFilteredNotes(filtered);
+            setDateInput(date);
+        } else {
+            setFilteredNotes(notes);
+            setDateInput('');
+        }
+    }
+
+    function clearDate() {
+        document.querySelector('#dateInput').value = '';
+        setFilteredNotes(notes);
+        setDateInput('');
+    }
     function renderNotesList(notes) {
         return (
             <>
+                <Form.Group className="dateForm">
+                    <Form.Control
+                        type="date"
+                        onChange={handleDateChange}
+                        className="mb-2"
+                        id="dateInput"
+                    />
+                    {dateInput && <Button className="clear" variant="secondary" onClick={clearDate}>Clear date</Button>}
+                </Form.Group>
                 <LinkContainer to="/notes/new">
                     <ListGroup.Item action className="py-3 text-nowrap text-truncate">
                         <BsPencilSquare size={17} />
                         <span className="ml-2 font-weight-bold">Create a new note</span>
                     </ListGroup.Item>
                 </LinkContainer>
-                {notes.map(({ noteId, content, createdAt }) => (
-                    <LinkContainer key={noteId} to={`/notes/${noteId}`}>
-                        <ListGroup.Item action>
-                            <span className="font-weight-bold">
-                                {content.trim().split("\n")[0]}
-                            </span>
-                            <br />
-                            <span className="text-muted">
-                                Created: {new Date(createdAt).toLocaleString()}
-                            </span>
-                            <input
-                                style={{ float: "right", transform: "scale(1.5)" }}
-                                type="checkbox"
-                                onClick={(event) => event.stopPropagation()}
-                                onChange={() => handleSelect(noteId)}
-                            />
-                        </ListGroup.Item>
-                    </LinkContainer>
-                ))}
+                {
+                    (() => {
+                        if (dateInput && filteredNotes.length === 0) {
+                            return <p className="no-notes">No notes found for this date</p>;
+                        } else {
+                            return (filteredNotes.length > 0 ? filteredNotes : notes).map(({ noteId, content, createdAt }) => (
+                                <LinkContainer key={noteId} to={`/notes/${noteId}`}>
+                                    <ListGroup.Item action>
+                                        <span className="font-weight-bold">
+                                            {content.trim().split("\n")[0]}
+                                        </span>
+                                        <br />
+                                        <span className="text-muted">
+                                            Created: {new Date(createdAt).toLocaleString()}
+                                        </span>
+                                        <input
+                                            style={{ float: "right", transform: "scale(1.5)" }}
+                                            type="checkbox"
+                                            onClick={(event) => event.stopPropagation()}
+                                            onChange={() => handleSelect(noteId)}
+                                        />
+                                    </ListGroup.Item>
+                                </LinkContainer>
+                            ))
+                        }
+                    })()
+                }
                 {selectedNotes.length > 0 && (
                     <button
                         className="btn btn-danger"
@@ -135,7 +177,7 @@ export default function Home() {
             </div>
             <ListGroup.Item action className="footer">
                 <a href="https://github.com/Madan1500/notes-app-client" target="_blank" rel="noopener noreferrer">
-                    <FaGithub className="github-logo"/>
+                    <FaGithub className="github-logo" />
                     <p>Github</p>
                 </a>
             </ListGroup.Item>

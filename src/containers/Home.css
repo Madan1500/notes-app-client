@@ -100,3 +100,27 @@
     height: 30px;
     margin-right: 10px;
 }
+.no-notes{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2rem;
+}
+.dateForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+#dateInput{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+.clear{
+    width: 60%;
+}
+
